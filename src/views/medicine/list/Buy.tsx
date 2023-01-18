@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
-
-import { selectAllOrderByBuy, deleteMedicine } from '@/api/medicine/index'
-import { Button, Checkbox, DatePicker, Drawer, DrawerProps, Input, message, Popconfirm, Select, Space, Table } from 'antd';
+import { FC, useEffect, useState } from 'react';
+import { selectAllOrderByBuy, deleteMedicine, insert, updated } from '@/api/medicine/index'
+import { Button, DatePicker, Drawer, DrawerProps, Input, message, Popconfirm, Select, Space, Table } from 'antd';
 import {
     EditOutlined,
     DeleteOutlined
@@ -41,7 +40,7 @@ const Index: FC<IIndexProps> = () => {
 
     const deleteMedicineById = (data: { id: number }) => {
         deleteMedicine(data).then((res) => {
-            if (res.data.code == 200) {
+            if (res.data.code === 200) {
                 message.success("删除成功！")
                 getMedicineListData()
 
@@ -51,19 +50,19 @@ const Index: FC<IIndexProps> = () => {
             }
         })
     }
-
+    const [updatedIdValue, setUpdatedIdValue] = useState<number>(0)
+    const [updatednameValue, setUpdateNameValue] = useState<string>("")
+    const [updatednumberValue, setUpdateNumberValue] = useState<number>(0)
+    const [updatedtimeValue, setUpdateTimeValue] = useState<string>("")
+    const [updatedbuyPriceValue, setUpdateBuyPriceValue] = useState<number>(0)
+    const [updatedsalePriceValue, setUpdateSalePriceValue] = useState<number>(0)
+    const [updatedgrowPlaceValue, setUpdateGrowPlaceValue] = useState<string>("")
     const columns = [
+
         {
-            title: '选择',
-            render(_: any, record: any, index: number) {
-                return (<Checkbox />)
-            }
-        },
-        {
-            title: '序号',
-            render(_: any, record: any, index: number) {
-                return (<span>{(config.current - 1) * config.pageSize + index + 1}</span>)
-            }
+            title: '药材编号',
+            dataIndex: "id",
+            key: "id"
         },
         {
             title: '药材名',
@@ -83,8 +82,8 @@ const Index: FC<IIndexProps> = () => {
 
         {
             title: '剩余数量/斤',
-            dataIndex: 'number',
-            key: 'number',
+            dataIndex: 'medicine_number',
+            key: 'medicine_number',
         },
         {
             title: '最后进货时间',
@@ -101,7 +100,22 @@ const Index: FC<IIndexProps> = () => {
             render(_: any, record: any, index: any) {
                 return (
                     <Space>
-                        <Button type='ghost' shape="circle" icon={<EditOutlined />}></Button>
+                        <Button
+                            type='ghost'
+                            shape="circle"
+                            icon={<EditOutlined />}
+                            onClick={() => {
+                                setUpdatedIdValue(record.id)
+                                setUpdateOpen(true)
+                                setUpdateNameValue(record.name)
+                                setUpdateNumberValue(record.medicine_number)
+                                setUpdateTimeValue(record.last_data)
+                                setUpdateBuyPriceValue(record.buy_price)
+                                setUpdateSalePriceValue(record.sale_price)
+                                setUpdateGrowPlaceValue(record.grow_place)
+                                selectAllOrderByBuy()
+                            }}
+                        ></Button>
                         <Popconfirm
                             title={"确定删除吗？"}
                             onConfirm={() => {
@@ -118,16 +132,19 @@ const Index: FC<IIndexProps> = () => {
             }
         },
     ];
+
     const [height] = useState(document.body.offsetHeight)
 
     const [open, setOpen] = useState(false);
-    const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
+    const [updateOpen, setUpdateOpen] = useState(false);
+    const [placement] = useState<DrawerProps['placement']>('right');
 
     const [nameValue, setNameValue] = useState<string>("")
+    const [numberValue, setNumberValue] = useState<Number>(0)
     const [timeValue, setTimeValue] = useState<string>("")
     const [buyPriceValue, setBuyPriceValue] = useState<number>(0)
     const [salePriceValue, setSalePriceValue] = useState<number>(0)
-    const [growPlaceValue, setGrowPlaceValue] = useState<string>("")
+    const [growPlaceValue, setGrowPlaceValue] = useState<string>("兰州市")
 
     const showDrawer = () => {
         setOpen(true);
@@ -135,22 +152,23 @@ const Index: FC<IIndexProps> = () => {
     const onClose = () => {
         setOpen(false);
     };
-
+    const onUpdatedClose = () => {
+        setUpdateOpen(false);
+    };
 
     return (
         <>
             <div style={{
                 width: "100%",
+                position: "relative",
+                height: "45px"
             }}>
-                <Button type="primary"
-                    onClick={() => {
-                    }}
-                >批量删除</Button>
+
                 <Button
                     type="primary"
                     style={{
-                        position: "absolute", right: "50px"
-
+                        position: "absolute",
+                        right: "0"
                     }}
                     onClick={() => {
                         showDrawer()
@@ -164,23 +182,35 @@ const Index: FC<IIndexProps> = () => {
                 scroll={{ y: height - 330 }}
                 pagination={config}
             ></Table>
-
             <Drawer
                 title="添加药材数据"
                 placement={placement}
-                width={500}
+                width={350}
                 onClose={onClose}
                 open={open}
                 extra={
                     <Space>
                         <Button onClick={onClose}>取消</Button>
                         <Button type="primary" onClick={() => {
+                            console.log(nameValue, numberValue, timeValue, buyPriceValue, salePriceValue, growPlaceValue);
+                            if (isNaN(numberValue as unknown as number) || isNaN(buyPriceValue) || isNaN(salePriceValue) || nameValue.length === 0 || buyPriceValue === 0 || salePriceValue === 0 || timeValue.length === 0) {
+                                message.error("输入错误，请检查！")
 
+                            } else if (buyPriceValue > salePriceValue) {
+                                message.error("进价不能比售价高！")
 
-                            if (1) {
-                                setOpen(false);
+                            } else {
+                                insert({ name: nameValue, medicine_number: numberValue, last_data: timeValue, buy_price: buyPriceValue, sale_price: salePriceValue, grow_place: growPlaceValue }).then(res => {
+                                    if (res.data.code === 200) {
+                                        message.success("添加成功")
+                                        setOpen(false);
+                                    } else {
+                                        message.error("添加失败")
+                                    }
+                                })
 
                             }
+
                         }}>
                             确认添加
                         </Button>
@@ -189,12 +219,11 @@ const Index: FC<IIndexProps> = () => {
 
             >
                 <Input
-                    onChange={(e) => { 
+                    onChange={(e) => {
                         setNameValue(e.target.value)
-                    console.log(nameValue);
-                                            
+
                     }}
-                    
+
                     placeholder='请输入药品名'
                     allowClear={true}
 
@@ -205,30 +234,34 @@ const Index: FC<IIndexProps> = () => {
                     placeholder={"请选择入库时间"}
                     style={{ width: "100%", margin: "10px 0" }}
                     onChange={(data, dataString) => {
+                        console.log(data);
+
                         setTimeValue(dataString)
-                        console.log(dataString);
-
-
                     }}
                 />
                 <Input
-                    onChange={(e) => { 
-                        setNameValue(e.target.value)
-                    console.log(nameValue);
-                                            
+                    onChange={(e) => {
+                        if (isNaN(e.target.value as unknown as number)) {
+                            message.error("请输入数字")
+                        }
+                        setNumberValue(e.target.value as unknown as number)
+
                     }}
-                    
+
                     placeholder='请输入数量/斤'
                     allowClear={true}
+
 
                 />
                 <Input
                     placeholder='请输入进价'
                     style={{ margin: "5px 0" }}
                     allowClear={true}
-                    onChange={(value) => {
-                        console.log(value);
-
+                    onChange={(e) => {
+                        if (isNaN(e.target.value as unknown as number)) {
+                            message.error("请输入数字！")
+                        }
+                        setBuyPriceValue(e.target.value as unknown as number)
                     }}
                 />
 
@@ -237,10 +270,18 @@ const Index: FC<IIndexProps> = () => {
 
                     placeholder='请输入售价'
                     style={{ margin: "5px 0" }}
+                    onChange={(e) => {
+                        if (isNaN(e.target.value as unknown as number)) {
+                            message.error("请输入数字！")
+                        }
+                        setSalePriceValue(e.target.value as unknown as number)
+                    }}
                 />
 
                 <Select
                     onChange={(value) => {
+                        console.log(value);
+
                         setGrowPlaceValue(value)
                     }}
                     defaultValue="兰州市"
@@ -302,6 +343,159 @@ const Index: FC<IIndexProps> = () => {
                 />
 
 
+            </Drawer>
+
+            <Drawer
+                title="修改数据"
+                width={350}
+                placement={"left"}
+                closable={true}
+                onClose={onUpdatedClose}
+                open={updateOpen}
+                extra={<Space>
+                    <Button onClick={onUpdatedClose}>取消</Button>
+                    <Button type="primary" onClick={() => {
+                        console.log(updatedIdValue, updatednameValue, updatednumberValue, updatedtimeValue, updatedbuyPriceValue, updatedsalePriceValue, updatedsalePriceValue, updatedgrowPlaceValue);
+
+                        updated(
+                            {
+                                id: updatedIdValue,
+                                name: updatednameValue,
+                                medicine_number: updatednumberValue,
+                                last_data: updatedtimeValue,
+                                buy_price: updatedbuyPriceValue,
+                                sale_price: updatedsalePriceValue,
+                                grow_place: updatedgrowPlaceValue
+                            }
+                        ).then(res => {
+                            console.log(res.data);
+                            message.success("修改成功")
+                            getMedicineListData()
+                        })
+                        onUpdatedClose()
+
+                    }}>
+                        确认修改
+                    </Button>
+                </Space>}
+            >
+                <Input
+                    disabled
+                    value={updatednameValue}
+                    onChange={(e) => {
+                    }}
+                    placeholder='请输入药品名'
+                    allowClear={true}
+
+                />
+
+                <DatePicker
+                    placeholder={updatedtimeValue}
+                    style={{ width: "100%", margin: "10px 0" }}
+                    onChange={(data, dataString) => {
+                        console.log(dataString);
+                        
+                        setUpdateTimeValue(dataString)
+                    }}
+                />
+                <Input
+                    onChange={(e) => {
+                        if (isNaN(e.target.value as unknown as number)) {
+                            message.error("请输入数字")
+                        }
+                        setUpdateNumberValue(e.target.value as unknown as number)
+                    }}
+                    placeholder={updatednumberValue.toString()}
+                    allowClear={true}
+                />
+                <Input
+                    placeholder={updatedbuyPriceValue.toString()}
+                    style={{ margin: "5px 0" }}
+                    allowClear={true}
+                    onChange={(e) => {
+                        if (isNaN(e.target.value as unknown as number)) {
+                            message.error("请输入数字！")
+                        }
+                        setUpdateBuyPriceValue(e.target.value as unknown as number)
+                    }}
+                />
+
+                <Input
+                    allowClear={true}
+                    placeholder={updatedsalePriceValue.toString()}
+
+
+                    style={{ margin: "5px 0" }}
+                    onChange={(e) => {
+                        if (isNaN(e.target.value as unknown as number)) {
+                            message.error("请输入数字！")
+                        } else {
+                            setUpdateSalePriceValue(e.target.value as unknown as number)
+                        }
+                    }}
+                />
+
+                <Select
+                    onChange={(value) => {
+                        setUpdateGrowPlaceValue(value)
+                    }}
+                    placeholder={updatedgrowPlaceValue}
+                    style={{ width: "100%" }}
+                    options={[
+                        {
+                            value: '兰州市',
+                            label: '兰州市',
+                        },
+                        {
+                            value: '嘉峪关市',
+                            label: '嘉峪关市',
+                        },
+                        {
+                            value: '金昌市',
+                            label: '金昌市',
+                        },
+                        {
+                            value: '白银市',
+                            label: '白银市',
+                        },
+                        {
+                            value: '天水市',
+                            label: '天水市',
+                        },
+                        {
+                            value: '武威市',
+                            label: '武威市',
+                        },
+                        {
+                            value: '张掖市',
+                            label: '张掖市',
+                        },
+                        {
+                            value: '平凉市',
+                            label: '平凉市',
+                        },
+                        {
+                            value: '酒泉市',
+                            label: '酒泉市',
+                        },
+                        {
+                            value: '定西市',
+                            label: '定西市',
+                        },
+                        {
+                            value: '陇南市',
+                            label: '陇南市',
+                        },
+                        {
+                            value: '临夏回族自治州',
+                            label: '临夏回族自治州',
+                        },
+                        {
+                            value: '甘南藏族自治州',
+                            label: '甘南藏族自治州',
+                        }
+                    ]}
+                />
             </Drawer>
         </>
 

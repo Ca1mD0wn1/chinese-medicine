@@ -39,3 +39,18 @@ export function search(params: { string: string }) {
         data: params
     })
 }
+
+export function insert(params: { name: string, medicine_number: Number, last_data: string, buy_price: number, sale_price: number, grow_place: string }) {
+    return request({
+        url: 'insert',
+        method: 'POST',
+        data: params
+    })
+}
+export function updated(params: { id: number, name: string, medicine_number: Number, last_data: string, buy_price: number, sale_price: number, grow_place: string }) {
+    return request({
+        url: 'updated',
+        method: 'POST',
+        data: params
+    })
+}

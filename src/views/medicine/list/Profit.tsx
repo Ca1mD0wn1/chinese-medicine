@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import  { FC, useEffect, useState } from 'react';
 
 import { deleteMedicine, selectAllOrderByProfit } from '@/api/medicine/index'
-import { Button, Checkbox, message, Popconfirm, Space, Table } from 'antd';
+import { Button,  message, Popconfirm, Space, Table } from 'antd';
 import {
     EditOutlined,
     DeleteOutlined
@@ -42,7 +41,7 @@ const Index: FC<IIndexProps> = () => {
 
     const deleteMedicineById = (data: { id: number }) => {
         deleteMedicine(data).then((res) => {
-            if (res.data.code == 200) {
+            if (res.data.code === 200) {
                 message.success("删除成功！")
                 getMedicineListData()
 
@@ -54,12 +53,7 @@ const Index: FC<IIndexProps> = () => {
     }
 
     const columns = [
-        {
-            title: '选择',
-            render(_: any, record: any, index: number) {
-                return (<Checkbox />)
-            }
-        },
+
         {
             title: '序号',
             render(_: any, record: any, index: number) {
@@ -125,10 +119,7 @@ const Index: FC<IIndexProps> = () => {
                     <div style={{
                 width: "100%",
             }}>
-                <Button type="primary"
-                    onClick={() => {
-                    }}
-                >批量删除</Button>
+
                 <Button type="primary" style={{
                     position: "absolute", right: "50px"
 
