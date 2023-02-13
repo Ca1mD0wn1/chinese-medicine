@@ -14,9 +14,6 @@ import Home from '@/views/Index'
 import Medicine from '@/views/medicine/Index'
 import MedicineList from '@/views/medicine/list/Index'
 import MedicineSearch from '@/views/medicine/search/Index'
-import MedicineListBuy from '@/views/medicine/list/Buy'
-import MedicineListProfit from '@/views/medicine/list/Profit'
-import MedicineListSale from '@/views/medicine/list/Sale'
 import Setting from '@/views/setting/Index'
 import Account from '@/views/account/Index'
 import AccountAdminList from '@/views/account/AdminList'
@@ -30,7 +27,7 @@ const menus: IMenuProps[] = [
     element: <Home></Home>
   },
   {
-    label: '药材管理',
+    label: '药材列表',
     key: '/medicine',
     icon: <ProfileOutlined />,
     element: <Medicine />,
@@ -40,27 +37,7 @@ const menus: IMenuProps[] = [
         key: '/medicine/list',
         icon: <OrderedListOutlined />,
         element: <MedicineList />,
-        children: [
-          {
-            label: '进价排序',
-            key: '/medicine/list/buy',
-            icon: <OrderedListOutlined />,
-            element: <MedicineListBuy />,
-            index: 1
-          },
-          {
-            label: '售价排序',
-            key: '/medicine/list/sale',
-            icon: <OrderedListOutlined />,
-            element: <MedicineListSale />
-          },
-          {
-            label: '利润排序',
-            key: '/medicine/list/profit',
-            icon: <OrderedListOutlined />,
-            element: <MedicineListProfit />
-          },
-        ]
+
       },
       {
         label: '查询药材',
