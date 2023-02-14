@@ -8,7 +8,7 @@ import { adminLoginFn } from '@/api/user/admin'
 import { useAppDispatch } from '@/store/hook';
 import { changeUsername, changeLoginState, changeLevel, changeToken } from '@/store/modules/admin';
 import { useNavigate } from 'react-router-dom';
-import { resolve } from 'path';
+
 
 const App: React.FC = () => {
     const onFinish = (values: any) => {

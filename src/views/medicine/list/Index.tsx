@@ -245,6 +245,8 @@ const Index: FC<IIndexProps> = () => {
                                 insert({ name: nameValue, medicine_number: numberValue, last_data: timeValue, buy_price: buyPriceValue, sale_price: salePriceValue, grow_place: growPlaceValue }).then(res => {
                                     if (res.data.code === 200) {
                                         message.success("添加成功")
+                                        getMedicineListData()
+
                                         setOpen(false);
                                     } else {
                                         message.error("添加失败")
