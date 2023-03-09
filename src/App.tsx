@@ -1,7 +1,6 @@
 import { FC } from "react";
 
 import Index from './layout/Index'
-
 import Login from '@/views/login/Index'
 
 import { Routes, Route, Navigate } from 'react-router-dom'

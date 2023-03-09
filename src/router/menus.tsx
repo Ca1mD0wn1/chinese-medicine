@@ -6,10 +6,11 @@ import {
   FilterOutlined,
   TeamOutlined,
   UserOutlined,
-  SettingOutlined
+  SettingOutlined,
+  BarChartOutlined
 } from '@ant-design/icons'
 
-import Home from '@/views/Index'
+import Home from '@/views/home/Index'
 
 import Medicine from '@/views/medicine/Index'
 import MedicineList from '@/views/medicine/list/Index'
@@ -18,6 +19,7 @@ import Setting from '@/views/setting/Index'
 import Account from '@/views/account/Index'
 import AccountAdminList from '@/views/account/AdminList'
 import AccountUserList from '@/views/account/UserList'
+import Analyze from '@/views/analyze/Index'
 
 const menus: IMenuProps[] = [
   {
@@ -67,6 +69,12 @@ const menus: IMenuProps[] = [
         element: <AccountAdminList />
       }
     ]
+  },
+  {
+    label:"统计分析",
+    key:'/analyze',
+    icon:<BarChartOutlined />,
+    element:<Analyze/>
   },
   {
     label: '设置',
