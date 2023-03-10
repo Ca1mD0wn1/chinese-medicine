@@ -1,7 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { Col, Row, Statistic, QRCode } from 'antd';
+import { Col, Row, Statistic } from 'antd';
 import { selectAllMedicine } from '@/api/medicine';
 import * as echarts from 'echarts';
+import CountUp from 'react-countup';
 interface IIndexProps {
 
 
@@ -77,17 +78,17 @@ const Index: FC<IIndexProps> = () => {
         });
     }, [areaData])
 
-
+    const formatter = (value: any) => <CountUp end={value} separator="," />;
     return (
         <>
             <Row gutter={12}>
                 <Col span={12}>
-                    <Statistic title="中药种类总数量" value={medicineNumber} />
+                    <Statistic title="中药种类总数量" value={medicineNumber} formatter={formatter}/>
                 </Col>
 
 
                 <Col span={99}>
-                    <Statistic title="中药总数量/斤" value={allNumber} />
+                    <Statistic title="中药总数量/斤" value={allNumber} formatter={formatter} />
                 </Col>
                 {/* <Col span={12}>
             <Statistic title="Active Users" value={112893} loading />

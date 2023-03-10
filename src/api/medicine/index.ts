@@ -54,3 +54,29 @@ export function updated(params: { id: number, name: string, medicine_number: Num
         data: params
     })
 }
+
+export function getMonthAndOperate(params: { id: number }) {
+
+    return request({
+        url: 'selectMedicineOperate',
+        method: 'POST',
+        data: params
+    })
+}
+
+export function getMedicineInfoById(params: { id: number }) {
+    return request({
+        url: 'getMedicineInfoById',
+        method: 'POST',
+        data: params
+    })
+}
+
+export function selectOperateById(params: { operate_id: number }) {
+    return request({
+        url: 'selectOperate',
+        method: 'POST',
+        data: params
+    })
+}
+

@@ -71,10 +71,10 @@ const menus: IMenuProps[] = [
     ]
   },
   {
-    label:"统计分析",
-    key:'/analyze',
-    icon:<BarChartOutlined />,
-    element:<Analyze/>
+    label: "统计分析",
+    key: '/analyze',
+    icon: <BarChartOutlined />,
+    element: <Analyze />
   },
   {
     label: '设置',

@@ -1,7 +1,5 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { Col, Row, Statistic, QRCode } from 'antd';
-import { selectAllMedicine } from '@/api/medicine';
-import * as echarts from 'echarts';
+import { FC } from 'react';
+
 interface IIndexProps {
 
 

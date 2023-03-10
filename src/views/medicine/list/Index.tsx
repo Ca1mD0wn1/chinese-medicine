@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons'
 import usePagination from '@/hooks/usePagination';
 import dayjs from 'dayjs';
+import { useNavigate } from "react-router-dom";
 interface IIndexProps {
 
 };
@@ -63,10 +64,8 @@ const Index: FC<IIndexProps> = () => {
             if (res.data.code === 200) {
                 message.success("删除成功！")
                 getMedicineListData()
-
             } else {
                 message.error("删除失败！")
-
             }
         })
     }
@@ -124,7 +123,8 @@ const Index: FC<IIndexProps> = () => {
                             type='ghost'
                             shape="circle"
                             icon={<EditOutlined />}
-                            onClick={() => {
+                            onClick={(e) => {
+                                e.stopPropagation()
                                 setUpdatedIdValue(record.id)
                                 setUpdateOpen(true)
                                 setUpdateNameValue(record.name)
@@ -142,7 +142,12 @@ const Index: FC<IIndexProps> = () => {
                                 deleteMedicineById(data)
                             }}
                         >
-                            <Button danger shape="circle"
+                            <Button
+                                danger
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                }}
+                                shape="circle"
                                 icon={<DeleteOutlined />}>
                             </Button>
                         </Popconfirm>
@@ -175,6 +180,7 @@ const Index: FC<IIndexProps> = () => {
         setUpdateOpen(false);
     };
 
+    const navigate = useNavigate();
 
     return (
         <>
@@ -224,6 +230,16 @@ const Index: FC<IIndexProps> = () => {
                 rowKey={(record) => record.id}
                 scroll={{ y: height - 330 }}
                 pagination={config}
+                onRow={(record) => {
+                    return {
+                        onClick: (e) => {
+                            if ((e.target as HTMLElement).tagName!=="TD") { 
+                                return null
+                            };
+                            navigate(`details?id=${record.id}`)
+                        },
+                    }
+                }}
             ></Table>
             <Drawer
                 title="添加药材数据"
@@ -235,7 +251,7 @@ const Index: FC<IIndexProps> = () => {
                     <Space>
                         <Button onClick={onClose}>取消</Button>
                         <Button type="primary" onClick={() => {
-                            if (isNaN(numberValue as unknown as number) || isNaN(buyPriceValue) || isNaN(salePriceValue) || nameValue.length === 0 || buyPriceValue === 0 || salePriceValue === 0 || timeValue.length === 0||numberValue<0) {
+                            if (isNaN(numberValue as unknown as number) || isNaN(buyPriceValue) || isNaN(salePriceValue) || nameValue.length === 0 || buyPriceValue === 0 || salePriceValue === 0 || timeValue.length === 0 || numberValue < 0) {
                                 message.error("输入错误，请检查！")
 
                             } else if (buyPriceValue > salePriceValue) {
@@ -265,7 +281,6 @@ const Index: FC<IIndexProps> = () => {
                 <Input
                     onChange={(e) => {
                         setNameValue(e.target.value)
-
                     }}
 
                     placeholder='请输入药品名'
@@ -278,7 +293,7 @@ const Index: FC<IIndexProps> = () => {
                     placeholder={"请选择入库时间"}
                     style={{ width: "100%", margin: "10px 0" }}
                     onChange={(data, dataString) => {
-                        console.log(data);
+                        // console.log(data);
 
                         setTimeValue(dataString)
                     }}
@@ -324,8 +339,6 @@ const Index: FC<IIndexProps> = () => {
 
                 <Select
                     onChange={(value) => {
-                        console.log(value);
-
                         setGrowPlaceValue(value)
                     }}
                     defaultValue="兰州市"
@@ -402,7 +415,7 @@ const Index: FC<IIndexProps> = () => {
                     <Button type="primary" onClick={() => {
 
 
-                        if (isNaN(updatednumberValue as unknown as number) || isNaN(updatedbuyPriceValue) || isNaN(updatedsalePriceValue) || updatednameValue.length === 0 || updatedbuyPriceValue === 0 || updatedsalePriceValue === 0 || updatedtimeValue.length === 0||updatednumberValue<0) {
+                        if (isNaN(updatednumberValue as unknown as number) || isNaN(updatedbuyPriceValue) || isNaN(updatedsalePriceValue) || updatednameValue.length === 0 || updatedbuyPriceValue === 0 || updatedsalePriceValue === 0 || updatedtimeValue.length === 0 || updatednumberValue < 0) {
                             message.error("输入错误，请检查！")
 
                         } else if (updatedbuyPriceValue > updatedsalePriceValue) {
@@ -420,7 +433,7 @@ const Index: FC<IIndexProps> = () => {
                                     grow_place: updatedgrowPlaceValue
                                 }
                             ).then(res => {
-                                console.log(res.data);
+                                // console.log(res.data);
                                 message.success("修改成功")
                                 getMedicineListData()
                             })
@@ -447,7 +460,7 @@ const Index: FC<IIndexProps> = () => {
                     defaultValue={dayjs(updatedtimeValue)}
                     style={{ width: "100%", margin: "10px 0" }}
                     onChange={(data, dataString) => {
-                        console.log(dataString);
+                        // console.log(dataString);
 
                         setUpdateTimeValue(dataString)
                     }}

@@ -3,6 +3,7 @@ import { AudioOutlined } from '@ant-design/icons';
 import { Button, Checkbox, DatePicker, Drawer, Input, message, Popconfirm, Select, Space, Table } from 'antd';
 import { deleteMedicine, search, updated } from '@/api/medicine/index'
 import { config } from 'process';
+import { useNavigate } from 'react-router-dom';
 import {
     EditOutlined,
     DeleteOutlined
@@ -14,7 +15,7 @@ interface IProps {
 
 };
 const App: FC<IProps> = () => {
-
+    const navigate = useNavigate()
     const [searchString, setSearchString] = useState<string>('')
     const [datasource, setDatasource] = useState([])
 
@@ -112,7 +113,9 @@ const App: FC<IProps> = () => {
                             type='ghost'
                             shape="circle"
                             icon={<EditOutlined />}
-                            onClick={() => {
+                            onClick={(e) => {
+                                e.stopPropagation()
+
                                 setUpdatedIdValue(record.id)
                                 setUpdateOpen(true)
                                 setUpdateNameValue(record.name)
@@ -124,13 +127,20 @@ const App: FC<IProps> = () => {
                             }}
                         ></Button>
                         <Popconfirm
+                        
                             title={"确定删除吗？"}
-                            onConfirm={() => {
+                            
+                            onConfirm={(e) => {
                                 let data = { id: record.id }
                                 deleteMedicineById(data)
                             }}
                         >
-                            <Button danger shape="circle"
+                            <Button
+                             danger
+                             onClick={(e) => {
+                                e.stopPropagation()
+                            }}
+                              shape="circle"
                                 icon={<DeleteOutlined />}>
                             </Button>
                         </Popconfirm>
@@ -322,8 +332,16 @@ const App: FC<IProps> = () => {
                 rowKey={(record) => record.id}
                 scroll={{ y: height - 330 }}
                 pagination={config}
+                onRow={(record) => {
+                    return {
+                        onClick: () => { 
+                            navigate(`details?id=${record.id}`)
+                            
+                        },
+                    }
+                }}
             ></Table>
-
+g
 
         </>
     )
