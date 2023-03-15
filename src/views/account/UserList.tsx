@@ -5,7 +5,7 @@ import { Button, Space, Table } from 'antd';
 import {
     EditOutlined,
     DeleteOutlined
-  } from '@ant-design/icons'
+} from '@ant-design/icons'
 interface IUserListProps {
 
 
@@ -41,12 +41,18 @@ const UserList: FC<IUserListProps> = () => {
             key: 'username',
         },
         {
-            title: '用户等级',
-            dataIndex: 'level',
+            title: '用户身份',
+            render(_: any, record: any, index: any) {
+                return (
+                    <span>
+                        {record.level === 1 ? "消费者" : "生产者"}
+                    </span>
+                )
+            },
             key: 'level',
         },
         {
-            title: '操作',
+            title: '   操作',
             render(_: any, record: any, index: any) {
                 return (
                     <Space>

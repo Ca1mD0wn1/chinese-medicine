@@ -83,7 +83,7 @@ const Index: FC<IIndexProps> = () => {
         <>
             <Row gutter={12}>
                 <Col span={12}>
-                    <Statistic title="中药种类总数量" value={medicineNumber} formatter={formatter}/>
+                    <Statistic title="中药种类总数量" value={medicineNumber} formatter={formatter} />
                 </Col>
 
 

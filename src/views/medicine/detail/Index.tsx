@@ -5,13 +5,14 @@ import Descriptions from 'antd/es/descriptions';
 import { AxiosResponse } from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
+// import { encryption, decrypt } from "@/utils/crypto"
 interface IIndexProps {
 
 };
 
 const Index: FC<IIndexProps> = () => {
     const [searchParams] = useSearchParams();
-    const [id, setId] = useState<number>(Number(searchParams.get("id")))
+    const [id] = useState<number>(Number(searchParams.get("id")))
     const [medicineData, setMedicineData] = useState({
         buy_price: 0,
         grow_place: '',
@@ -28,12 +29,14 @@ const Index: FC<IIndexProps> = () => {
     const [operateList, setOperateList] = useState<any>([])
     const getMedicineInfo = () => {
         getMedicineInfoById({ id }).then(res => {
+            console.log(res.data.data);
+
             setMedicineData(res.data.data[0]);
         })
     }
     useEffect(() => {
         getMedicineInfo()
-    }, [])
+    }, [id])
 
     useEffect(() => {
         setOperate_mouth(JSON.parse(medicineData.operate_mouth || "[]"))
@@ -52,9 +55,11 @@ const Index: FC<IIndexProps> = () => {
 
         Promise.all(getOperateData(operate_ids)).then(values => {
             data = values
+            console.log(data);
+
             setOperateList(data)
         });
-    }, [operate_mouth])
+    }, [operate_ids])
 
 
     return (
@@ -64,6 +69,8 @@ const Index: FC<IIndexProps> = () => {
                 right: 50
 
             }}>修改数据</Button>
+            {console.log(medicineData)
+            }
             <Descriptions title={medicineData.name} layout="vertical" bordered>
                 <Descriptions.Item label="产地">{medicineData.grow_place}</Descriptions.Item>
                 <Descriptions.Item label="收购价格/斤">{medicineData.buy_price}元</Descriptions.Item>
@@ -82,10 +89,9 @@ const Index: FC<IIndexProps> = () => {
                     }年
                     <br />
                     {operateList.map((item: any, index: any) => {
-                        console.log(operate_mouth);
-
                         return (
-                            <>{operate_mouth[index]}月{item.data.data[0].operate_detail}<br /></>)
+
+                            <><li key={index}>{operate_mouth[index]}月{item.data.data[0].operate_detail}</li></>)
                     })}
                 </Descriptions.Item>
             </Descriptions>

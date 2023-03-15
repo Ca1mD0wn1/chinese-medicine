@@ -341,7 +341,6 @@ const App: FC<IProps> = () => {
                     }
                 }}
             ></Table>
-g
 
         </>
     )

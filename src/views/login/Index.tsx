@@ -8,17 +8,27 @@ import { adminLoginFn } from '@/api/user/admin'
 import { useAppDispatch } from '@/store/hook';
 import { changeUsername, changeLoginState, changeLevel, changeToken } from '@/store/modules/admin';
 import { useNavigate } from 'react-router-dom';
-import { resolve } from 'path';
 
+// import { generatePublicKey, generatePrivateKey } from '@/utils/crypto'
 const App: React.FC = () => {
     const onFinish = (values: any) => {
         adminLoginFn(values).then((res) => {
-            if (res.data.code == 201) {
+            const result = res.data.data
+            console.log(result);
+            if (res.data.code === 201) {
                 message.error("账号密码错误或者没有账户！")
-            } if (res.data.code == 200) {
+            } if (res.data.code === 200) {
                 message.success("登陆成功！")
-                const result = res.data.data
-                console.log(result);
+
+                // rsa.generateKey(4096).then((key: any) => {
+                //     // now you get the JWK public and private keys
+                //     const publicKey = key.publicKey;
+
+                //     const privateKey = key.privateKey;
+
+                //     console.log(publicKey, "publicKey", privateKey, "privateKey");
+
+                // })
 
                 const user = {
                     loginState: true,

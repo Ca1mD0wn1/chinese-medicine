@@ -1,4 +1,3 @@
-// src/utils/request.ts
 import { message } from 'antd'
 import axios, { AxiosRequestConfig } from 'axios'
 import store from 'store2'
@@ -16,17 +15,19 @@ instance.interceptors.request.use((config) => {
   // 可以从本地获取用户的信息，如果用户的信息存在，提取Token,通过头信息传递给服务器
   // 以前给本地存储中存储多个数据，本项目存储的是一个对象 { loginState: true, adminname: '', 'X-Token': '', role: 1, checkedKeys: []}
   const storeUsers = store.get('user') // 存的时候就是存的对象
-
+  // console.log(storeUsers);
+  
   // 传递token信息
-  config.headers!.token = storeUsers && (storeUsers['token'] || '')
+  config.headers!.authorization = storeUsers && (storeUsers['token'] || '')
 
   return config
 }, (error) => Promise.reject(error))
 
 // 响应拦截器封装
 instance.interceptors.response.use((response: any) => {
+  
   // 验证token
-  if (response.data.code === '10119') {
+  if (response.data.code === 401) {
     // token 无效
     message.warning('登录失效，请重新登录');
 
@@ -45,6 +46,7 @@ instance.interceptors.response.use((response: any) => {
 }, (error) => Promise.reject(error))
 
 export default function request( config: AxiosRequestConfig ) {
+  
   // 接口请求 必须参数  url method  data  headers
   const { url = '', method = 'GET', data = {}, headers = {} } = config
 
