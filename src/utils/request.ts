@@ -3,9 +3,10 @@ import axios, { AxiosRequestConfig } from 'axios'
 import store from 'store2'
 
 const isDev = process.env.NODE_ENV === 'development'
+console.log(process.env.React_APP_API);
 
 const instance = axios.create({
-  baseURL: isDev ? 'http://127.0.0.1:3000' : 'http://127.0.0.1:3000',
+  baseURL: isDev ? `http://127.0.0.1:3000` : `http://127.0.0.1:3000`,
   timeout: 6000
 })
 
@@ -16,7 +17,7 @@ instance.interceptors.request.use((config) => {
   // 以前给本地存储中存储多个数据，本项目存储的是一个对象 { loginState: true, adminname: '', 'X-Token': '', role: 1, checkedKeys: []}
   const storeUsers = store.get('user') // 存的时候就是存的对象
   // console.log(storeUsers);
-  
+
   // 传递token信息
   config.headers!.authorization = storeUsers && (storeUsers['token'] || '')
 
@@ -25,7 +26,7 @@ instance.interceptors.request.use((config) => {
 
 // 响应拦截器封装
 instance.interceptors.response.use((response: any) => {
-  
+
   // 验证token
   if (response.data.code === 401) {
     // token 无效
@@ -45,8 +46,8 @@ instance.interceptors.response.use((response: any) => {
   return response
 }, (error) => Promise.reject(error))
 
-export default function request( config: AxiosRequestConfig ) {
-  
+export default function request(config: AxiosRequestConfig) {
+
   // 接口请求 必须参数  url method  data  headers
   const { url = '', method = 'GET', data = {}, headers = {} } = config
 
@@ -55,7 +56,7 @@ export default function request( config: AxiosRequestConfig ) {
     case 'GET':
       return instance.get(url, { params: data })
 
-    case 'POST': 
+    case 'POST':
       // 可能数据请求方式 表单提交  文件提交   默认json
       // 表单提交
       if (headers['content-type'] === 'application/x-www-form-url-encoded') {
@@ -78,14 +79,14 @@ export default function request( config: AxiosRequestConfig ) {
 
       // 默认 application/json
       return instance.post(url, data)
-    
+
     // 修改数据 - 所有的数据的更新
     case 'PUT':
       return instance.put(url, data)
 
     // 删除数据
-    case 'DELETE': 
-      return instance.delete(url, { data })  
+    case 'DELETE':
+      return instance.delete(url, { data })
 
     // 修改数据 - 部分的数据的更新
     case 'PATCH':

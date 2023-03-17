@@ -70,8 +70,7 @@ const Index: FC<IIndexProps> = () => {
                 right: 50
 
             }}>修改数据</Button>
-            {console.log(medicineData)
-            }
+
             <Descriptions title={medicineData.name} layout="vertical" bordered>
                 <Descriptions.Item label="产地">{medicineData.grow_place}</Descriptions.Item>
                 <Descriptions.Item label="收购价格/斤">{medicineData.buy_price}元</Descriptions.Item>
