@@ -43,9 +43,11 @@ const UserList: FC<IUserListProps> = () => {
         {
             title: '用户身份',
             render(_: any, record: any, index: any) {
+                console.log(record);
+
                 return (
                     <span>
-                        {record.level === 1 ? "消费者" : "生产者"}
+                        {record.level == 1 ? "消费者" : "生产者"}
                     </span>
                 )
             },

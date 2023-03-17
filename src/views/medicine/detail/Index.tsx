@@ -4,7 +4,7 @@ import Badge from 'antd/es/badge';
 import Descriptions from 'antd/es/descriptions';
 import { AxiosResponse } from 'axios';
 import { FC, useEffect, useState } from 'react';
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 // import { encryption, decrypt } from "@/utils/crypto"
 interface IIndexProps {
 
@@ -12,6 +12,7 @@ interface IIndexProps {
 
 const Index: FC<IIndexProps> = () => {
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate()
     const [id] = useState<number>(Number(searchParams.get("id")))
     const [medicineData, setMedicineData] = useState({
         buy_price: 0,
@@ -95,6 +96,11 @@ const Index: FC<IIndexProps> = () => {
                     })}
                 </Descriptions.Item>
             </Descriptions>
+            <Button
+                onClick={() => {
+                    navigate(-1)
+                }}
+            >{"<"}返回</Button>
         </>)
 };
 
