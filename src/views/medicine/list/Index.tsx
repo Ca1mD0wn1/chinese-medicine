@@ -233,7 +233,7 @@ const Index: FC<IIndexProps> = () => {
                 onRow={(record) => {
                     return {
                         onClick: (e) => {
-                            if ((e.target as HTMLElement).tagName!=="TD") { 
+                            if ((e.target as HTMLElement).tagName !== "TD") {
                                 return null
                             };
                             navigate(`details?id=${record.id}`)

@@ -127,20 +127,19 @@ const App: FC<IProps> = () => {
                             }}
                         ></Button>
                         <Popconfirm
-                        
+
                             title={"确定删除吗？"}
-                            
                             onConfirm={(e) => {
                                 let data = { id: record.id }
                                 deleteMedicineById(data)
                             }}
                         >
                             <Button
-                             danger
-                             onClick={(e) => {
-                                e.stopPropagation()
-                            }}
-                              shape="circle"
+                                danger
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                }}
+                                shape="circle"
                                 icon={<DeleteOutlined />}>
                             </Button>
                         </Popconfirm>
@@ -334,9 +333,12 @@ const App: FC<IProps> = () => {
                 pagination={config}
                 onRow={(record) => {
                     return {
-                        onClick: () => { 
+                        onClick: (e) => {
+                            if ((e.target as HTMLElement).tagName !== "TD") {
+                                return null
+                            };
                             navigate(`details?id=${record.id}`)
-                            
+
                         },
                     }
                 }}
