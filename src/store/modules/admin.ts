@@ -7,6 +7,7 @@ export interface IAdminState {
     username: string
     token: string
     level: number
+    nickName: string
 }
 
 const initialState: IAdminState = {
@@ -14,6 +15,7 @@ const initialState: IAdminState = {
     username: store.get('user') ? store.get('user')['username'] : '',
     token: store.get('user') ? store.get('user')['token'] : '',
     level: store.get('user') ? store.get('user')['level'] : 1,
+    nickName: store.get('user') ? store.get('user')['nickName'] : '',
 }
 
 const adminSlice = createSlice({
@@ -31,8 +33,10 @@ const adminSlice = createSlice({
         },
         changeLevel(state, action: PayloadAction<number>) {
             state.level = action.payload
-        },
-    }
+        }, changeNickName(state, action: PayloadAction<string>) {
+            state.nickName = action.payload
+        }
+    },
 })
 
 export const {
@@ -42,7 +46,8 @@ export const {
 
     changeToken,
 
-    changeLevel
+    changeLevel,
+    changeNickName
 
 } = adminSlice.actions
 

@@ -11,22 +11,17 @@ import { setCollapsed } from '@/store/modules/app'
 import { changeLoginState } from '@/store/modules/admin';
 import store2 from 'store2'
 import type { MenuProps } from 'antd';
-
+import { IAdminState } from "@/store/modules/admin"
 import { Dropdown, Space } from 'antd';
 
 const { Header } = Layout;
 
 interface IHeaderIndexProps {
 
-
 };
-
-
-
-
-
 const HeaderIndex: FC<IHeaderIndexProps> = () => {
   const navigate = useNavigate()
+  const nickName = useAppSelector(state => state.admins.nickName);
 
   const items: MenuProps['items'] = [
     {
@@ -41,8 +36,8 @@ const HeaderIndex: FC<IHeaderIndexProps> = () => {
       )
     }
   ];
+  const username = useAppSelector(state => state.admins.username);
 
-  const username = store2.get('user')['username']
   const collapsed = useAppSelector(state => state.app.collapsed);
   const dispatch = useAppDispatch()
   return (
@@ -56,9 +51,12 @@ const HeaderIndex: FC<IHeaderIndexProps> = () => {
       }
       <div style={{ position: 'absolute', right: '16px', top: '10px' }}>
         <Dropdown menu={{ items }} trigger={['click']}>
-          <a onClick={(e) => e.preventDefault()}>
+          <a onClick={(e) => {
+            e.preventDefault()
+          }
+          }>
             <Space>
-              {username}
+              {nickName.length > 0 ? nickName : username}
               <DownOutlined />
             </Space>
           </a>

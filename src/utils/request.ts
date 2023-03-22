@@ -3,7 +3,6 @@ import axios, { AxiosRequestConfig } from 'axios'
 import store from 'store2'
 
 const isDev = process.env.NODE_ENV === 'development'
-console.log(process.env.React_APP_API);
 
 const instance = axios.create({
   baseURL: isDev ? `http://127.0.0.1:3000` : `http://127.0.0.1:3000`,

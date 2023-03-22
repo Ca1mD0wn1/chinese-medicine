@@ -6,7 +6,7 @@ import store from 'store2'
 import './style.less';
 import { adminLoginFn } from '@/api/user/admin'
 import { useAppDispatch } from '@/store/hook';
-import { changeUsername, changeLoginState, changeLevel, changeToken } from '@/store/modules/admin';
+import { changeUsername, changeLoginState, changeLevel, changeToken, changeNickName } from '@/store/modules/admin';
 import { useNavigate } from 'react-router-dom';
 
 // import { generatePublicKey, generatePrivateKey } from '@/utils/crypto'
@@ -35,6 +35,7 @@ const App: React.FC = () => {
                     token: result.token,
                     username: result.username,
                     level: result.level,
+                    nickName: result.nickname
                 }
                 store.set('user', user)
 
@@ -42,6 +43,7 @@ const App: React.FC = () => {
                 dispatch(changeLoginState(true))
                 dispatch(changeLevel(result.level))
                 dispatch(changeToken(result.token))
+                dispatch(changeNickName(result.nickname))
                 navigate('/', { replace: true })
             }
 
