@@ -413,14 +413,10 @@ const Index: FC<IIndexProps> = () => {
                 extra={<Space>
                     <Button onClick={onUpdatedClose}>取消</Button>
                     <Button type="primary" onClick={() => {
-
-
                         if (isNaN(updatednumberValue as unknown as number) || isNaN(updatedbuyPriceValue) || isNaN(updatedsalePriceValue) || updatednameValue.length === 0 || updatedbuyPriceValue === 0 || updatedsalePriceValue === 0 || updatedtimeValue.length === 0 || updatednumberValue < 0) {
                             message.error("输入错误，请检查！")
-
                         } else if (updatedbuyPriceValue > updatedsalePriceValue) {
                             message.error("进价不能比售价高！")
-
                         } else {
                             updated(
                                 {
@@ -439,9 +435,6 @@ const Index: FC<IIndexProps> = () => {
                             })
                             onUpdatedClose()
                         }
-
-
-
                     }}>
                         确认修改
                     </Button>

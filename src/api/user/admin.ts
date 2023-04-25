@@ -24,3 +24,26 @@ export function getAdminList() {
     method: 'POST',
   })
 }
+
+export function deleteUser(params: { username: string }) {
+  return request({
+    url: 'deleteUser',
+    method: 'POST',
+    data: params
+  })
+}
+
+export function register(params: { username: string, password: string, nickname: string, level: string }) {
+  return request({
+    url: 'register',
+    method: 'POST',
+    data: params
+  })
+}
+export function updateUser(params: { username: string, password: string, nickname: string, level: string }){
+  return request({
+    url: 'updateUser',
+    method: 'POST',
+    data: params
+  })
+}
