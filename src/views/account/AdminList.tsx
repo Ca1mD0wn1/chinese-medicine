@@ -41,6 +41,10 @@ const UserList: FC<IUserListProps> = () => {
 
     const onClose = () => {
         setOpen(false);
+        setUsername("")
+        setPassword("")
+        setLevel("1")
+        setNickname("")
     };
     const columns = [
         {
@@ -168,6 +172,10 @@ const UserList: FC<IUserListProps> = () => {
             </Drawer>
             <Drawer title="修改管理员信息" placement="left" onClose={() => {
                 setUpdateOpen(false)
+                setUsername("")
+                setPassword("")
+                setLevel("1")
+                setNickname("")
             }} open={updateopen}>
                 <Input defaultValue={username} style={{ marginBottom: "10px" }}
                 disabled
