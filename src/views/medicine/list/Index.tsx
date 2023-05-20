@@ -8,6 +8,7 @@ import {
 import usePagination from '@/hooks/usePagination';
 import dayjs from 'dayjs';
 import { useNavigate } from "react-router-dom";
+import { reverse } from 'lodash';
 interface IIndexProps {
 
 };
@@ -22,35 +23,48 @@ interface DataType {
 }
 const Index: FC<IIndexProps> = () => {
     const [roule, setRoule] = useState<string>("Default")
-
+    const [sortRoule, setSortRoule] = useState<string>("up")
     const [medicineList, setMedicineList] = useState<DataType[]>([])
     const getMedicineListData = () => {
 
         switch (roule) {
             case "Default":
                 selectAllMedicine().then((res) => {
+                    if (sortRoule === "down") {
+                        setMedicineList(reverse(res.data.data))
+                    }
                     setMedicineList(res.data.data)
                 })
                 break;
             case "Buy": selectAllOrderByBuy().then((res) => {
+                if (sortRoule === "down") {
+                    setMedicineList(reverse(res.data.data))
+                }
                 setMedicineList(res.data.data)
             })
                 break;
             case "Sale": selectAllOrderBySale().then((res) => {
+                if (sortRoule === "down") {
+                    setMedicineList(reverse(res.data.data))
+                }
                 setMedicineList(res.data.data)
             })
                 break;
             case "Profit": selectAllOrderByProfit().then((res) => {
+                if (sortRoule === "down") {
+                    setMedicineList(reverse(res.data.data))
+                }
                 setMedicineList(res.data.data)
             })
                 break;
         }
 
+
     }
     useEffect(() => {
         getMedicineListData()
 
-    }, [roule])
+    }, [roule,sortRoule])
 
     const config = usePagination({
         position: ['bottomLeft'],
@@ -213,6 +227,23 @@ const Index: FC<IIndexProps> = () => {
                     }}
                     style={{ marginLeft: "10px" }}
                 >利润排序</Button>
+
+                <Button
+                    danger={sortRoule === 'up'}
+                    onClick={() => {
+                        setSortRoule("up")
+
+                    }}
+                    style={{ marginLeft: "10px" }}
+                >升序</Button>
+                <Button
+                    danger={sortRoule === 'down'}
+
+                    onClick={() => {
+                        setSortRoule("down")
+                    }}
+                    style={{ marginLeft: "10px" }}
+                >降序</Button>
                 <Button
                     type="primary"
                     style={{
